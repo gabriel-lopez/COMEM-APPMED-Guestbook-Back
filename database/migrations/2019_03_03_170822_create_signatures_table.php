@@ -14,16 +14,18 @@ class CreateSignaturesTable extends Migration
     public function up()
     {
         Schema::create('signatures', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
 
             $table->string('title');
             $table->text('message');
 
-            $table->bigInteger('user_id');
+            $table->integer('user_id')->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
+        });
 
+        Schema::table('signatures', function($table) {
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
