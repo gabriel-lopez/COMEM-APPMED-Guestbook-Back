@@ -19,7 +19,7 @@ class CreateSignaturesTable extends Migration
             $table->string('title');
             $table->text('message');
 
-            $table->integer('user_id');
+            $table->bigInteger('user_id');
 
             $table->timestamps();
             $table->softDeletes();
