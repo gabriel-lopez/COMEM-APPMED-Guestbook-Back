@@ -12,6 +12,11 @@ class BouncerSeeder extends Seeder
             'title' => 'Administrator',
         ]);
 
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'ban-users',
+            'title' => 'Ban users',
+        ]);
 
+        Bouncer::allow($admin)->to($ban);
     }
 }

@@ -32,9 +32,20 @@ class SignatureController extends Controller
     {
         if($user = Auth::user())
         {
-            // do what you need to do
+            $inputs = $request->all();
 
+            $inputs['user_id'] = $user->id;
 
+            $validation = Signature::getValidation($inputs);
+
+            if ($validation->fails())
+            {
+                return response()->json(['errors' => $validation->errors()], Response::HTTP_BAD_REQUEST);
+            }
+
+            $signature = Signature::createOne($inputs);
+
+            return response()->json($signature, Response::HTTP_CREATED);
         }
         else
         {
@@ -73,7 +84,14 @@ class SignatureController extends Controller
     {
         if($signature = Signature::find($id))
         {
+            if ($signature->user_id == Auth::user()->id)
+            {
 
+            }
+            else
+            {
+                return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
+            }
         }
         else
         {

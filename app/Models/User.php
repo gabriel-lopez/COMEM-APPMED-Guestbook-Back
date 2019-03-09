@@ -31,6 +31,7 @@ class User extends Authenticatable implements JWTSubject
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'banned_at' => 'datetime',
     ];
 
     public static function getValidation(Array $inputs)

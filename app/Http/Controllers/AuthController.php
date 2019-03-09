@@ -30,7 +30,7 @@ class AuthController extends Controller
             return response()->json(['errors' => $validation->errors()], Response::HTTP_BAD_REQUEST);
         }
 
-        $user = User::createOne($request->all());
+        $user = User::createOne($inputs);
 
         $token = $this->guard()->login($user);
 
@@ -41,7 +41,8 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = $this->guard()->attempt($credentials)) {
+        if (! $token = $this->guard()->attempt($credentials))
+        {
             return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 

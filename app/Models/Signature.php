@@ -42,9 +42,9 @@ class Signature extends Model
     public static function createOne(array $values)
     {
         $new = new self();
-        $new->title = $values['name'];
-        $new->message = $values['email'];
-        $new->user_id = 1;
+        $new->title = $values['title'];
+        $new->message = $values['message'];
+        $new->user_id = $values['user_id'];
         $new->save();
         return $new;
     }

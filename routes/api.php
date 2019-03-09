@@ -22,8 +22,8 @@ Route::prefix('auth')->group(function () {
 
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('user', 'AuthController@user');
-        Route::post('logout', 'AuthController@logout');
-    });
+Route::post('logout', 'AuthController@logout');
+});
 });
 
 Route::get('signatures', 'SignatureController@index');
@@ -33,4 +33,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('signatures', 'SignatureController@store');
     Route::put('signatures/{id}', 'SignatureController@update');
     Route::delete('signatures/{id}', 'SignatureController@destroy');
+});
+
+Route::prefix('admin')->group(function () {
+    Route::group(['middleware' => 'auth:api'], function(){
+        Route::get('users', 'UserController@index');
+        Route::get('ban/{id}', 'UserController@ban');
+    });
 });
