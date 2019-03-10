@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Http\Response;
 
 class Authenticate extends Middleware
 {
@@ -23,7 +24,7 @@ class Authenticate extends Middleware
     public function handle($request, Closure $next, ...$guards)
     {
         if ($this->authenticate($request, $guards) === 'authentication_error') {
-            return response()->json(['error'=>'Unauthorized']);
+            return response()->json(['error'=>'401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 
         return $next($request);

@@ -28,11 +28,11 @@ Route::post('logout', 'AuthController@logout');
 
 Route::get('signatures', 'SignatureController@index');
 Route::get('signatures/{id}', 'SignatureController@show');
+Route::put('signatures/{id}/report', 'SignatureController@report');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('signatures', 'SignatureController@store');
     Route::put('signatures/{id}', 'SignatureController@update');
-    Route::put('signatures/{id}/report', 'SignatureController@report');
     Route::delete('signatures/{id}', 'SignatureController@destroy');
 });
 
