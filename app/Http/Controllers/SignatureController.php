@@ -10,24 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SignatureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $signatures  = Signature::paginate(5);
+        $signatures = Signature::where('reported_at', "=", null)->paginate(5);
 
         return SignatureResource::collection($signatures);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if($user = Auth::user())
@@ -53,12 +42,6 @@ class SignatureController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         SignatureResource::withoutWrapping();
@@ -73,49 +56,59 @@ class SignatureController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         if($signature = Signature::find($id))
         {
             if ($signature->user_id == Auth::user()->id)
             {
+                $inputs = $request->all();
 
+                $validation = Signature::getValidation($inputs);
+
+                if ($validation->fails())
+                {
+                    return response()->json(['errors' => $validation->errors()], Response::HTTP_BAD_REQUEST);
+                }
+
+                //TODO
+
+                return response()->json(["error" => "200 Ok"], Response::HTTP_OK);
             }
-            else
-            {
-                return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
-            }
+
+            return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
-        else
-        {
-            return response()->json(["error" => "404 Not Found"], Response::HTTP_NOT_FOUND);
-        }
+
+        return response()->json(["error" => "404 Not Found"], Response::HTTP_NOT_FOUND);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
+    {
+        if (Auth::check() && Auth::user()->isAn('admin'))
+        {
+            if($signature = Signature::find($id))
+            {
+                $signature->delete();
+
+                return response()->json(["error" => "204 No Content"], Response::HTTP_NO_CONTENT);
+            }
+
+            return response()->json(["error" => "404 Not Found"], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function report($id)
     {
         if($signature = Signature::find($id))
         {
-            $signature->delete();
+            $signature->reported_at = now();
+            $signature->save();
 
-            return response()->json(["error" => "204 No Content"], Response::HTTP_NO_CONTENT);
+            return response()->json(["error" => "200 Ok"], Response::HTTP_OK);
         }
-        else
-        {
-            return response()->json(["error" => "404 Not Found"], Response::HTTP_NOT_FOUND);
-        }
+
+        return response()->json(["error" => "404 Not Found"], Response::HTTP_NOT_FOUND);
     }
 }

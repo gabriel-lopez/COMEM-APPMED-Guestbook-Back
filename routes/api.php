@@ -32,12 +32,13 @@ Route::get('signatures/{id}', 'SignatureController@show');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('signatures', 'SignatureController@store');
     Route::put('signatures/{id}', 'SignatureController@update');
+    Route::put('signatures/{id}/report', 'SignatureController@report');
     Route::delete('signatures/{id}', 'SignatureController@destroy');
 });
 
 Route::prefix('admin')->group(function () {
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('users', 'UserController@index');
-        Route::get('ban/{id}', 'UserController@ban');
+        Route::put('users/(id}/ban', 'UserController@ban');
     });
 });

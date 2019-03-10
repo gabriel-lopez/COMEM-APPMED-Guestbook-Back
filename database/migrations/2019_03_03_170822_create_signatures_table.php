@@ -22,6 +22,7 @@ class CreateSignaturesTable extends Migration
             $table->integer('user_id')->unsigned();
 
             $table->timestamps();
+            $table->timestamp('reported_at')->nullable();
             $table->softDeletes();
         });
 
