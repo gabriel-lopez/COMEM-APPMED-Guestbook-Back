@@ -16,16 +16,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')->group(function () {
+
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
     Route::get('refresh', 'AuthController@refresh');
 
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('user', 'AuthController@user');
-Route::post('logout', 'AuthController@logout');
-});
+        Route::post('logout', 'AuthController@logout');
+    });
 });
 
+/**
+ * @api {get} /signatures Request all signatures
+ * @apiGroup Signature
+ */
 Route::get('signatures', 'SignatureController@index');
 Route::get('signatures/{id}', 'SignatureController@show');
 Route::put('signatures/{id}/report', 'SignatureController@report');

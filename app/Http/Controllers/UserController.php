@@ -21,7 +21,7 @@ class UserController extends Controller
         return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
 
-    public function ban(Request $request, $id)
+    public function ban($id)
     {
         if (Auth::check() && Auth::user()->isAn('admin'))
         {
@@ -38,6 +38,4 @@ class UserController extends Controller
 
         return response()->json(['error' => '401 Unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
-
-
 }

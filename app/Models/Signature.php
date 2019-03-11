@@ -14,19 +14,22 @@ class Signature extends Model
 
     public static $rules = [
         'title' => 'required|string|max:255',
-        'message' => 'required|string|',
+        'message' => 'required|string|max:255',
         'user_id' => 'required|int|',
     ];
 
     protected $hidden = [
         'user_id',
+        'updated_at',
         'deleted_at',
+        'reported_at'
     ];
 
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'reported_at'
     ];
 
     public static function getValidation(Array $inputs)

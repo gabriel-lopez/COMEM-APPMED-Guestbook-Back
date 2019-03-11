@@ -12,11 +12,30 @@ class BouncerSeeder extends Seeder
             'title' => 'Administrator',
         ]);
 
+        $moderator = Bouncer::role()->firstOrCreate([
+            'name' => 'mod',
+            'title' => 'Moderator',
+        ]);
+
         $ban = Bouncer::ability()->firstOrCreate([
             'name' => 'ban-users',
             'title' => 'Ban users',
         ]);
 
+        $delete = Bouncer::ability()->firstOrCreate([
+            'name' => 'delete-signatures',
+            'title' => 'Delete signatures',
+        ]);
+
+        $update = Bouncer::ability()->firstOrCreate([
+            'name' => 'update-signatures',
+            'title' => 'Update signatures',
+        ]);
+
         Bouncer::allow($admin)->to($ban);
+        Bouncer::allow($admin)->to($update);
+        Bouncer::allow($admin)->to($delete);
+
+        Bouncer::allow($moderator)->to($update);
     }
 }
